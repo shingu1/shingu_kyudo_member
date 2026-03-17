@@ -199,7 +199,9 @@
 </div>
 
 <script>
-    // ★ご自身のWebアプリURLに書き換えてください
+    // ==========================================
+    //  ★ 必ずご自身のGAS URLを入れてください ★
+    // ==========================================
     const GAS_URL = "https://script.google.com/macros/s/AKfycbztpc_juaM07bYmmO4BTqKIUDd354Xngo5dOPt0runtFXvBka1_o595HA4bMyIOLqmR/exec";
     const DRAFT_KEY = "club_journal_draft_v3"; 
     
@@ -207,7 +209,7 @@
     let currentTargetInput = null;
     let cachedJournalHistory = [];
 
-    // HTMLエスケープ処理（安全に描画するため）
+    // HTMLエスケープ処理
     function escapeHtml(str) {
         if(!str) return "";
         return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
@@ -231,7 +233,6 @@
         const today = new Date().toLocaleDateString('ja-JP'); 
 
         if (draft.saveDate && draft.saveDate !== today) {
-            console.log("日付変更を検知: フォームをリセットします");
             localStorage.removeItem(DRAFT_KEY);
             return;
         }
@@ -403,15 +404,35 @@
         }).catch(err => { display.textContent = "読み込み失敗"; display.style.color = "red"; });
     }
     
+    let lastChatDataString = "";
+
     function checkNewMessages() {
-        if (!navigator.onLine) { setTimeout(checkNewMessages, 15000); return; }
-        fetch(GAS_URL + "?action=getChat").then(res => res.json()).then(data => {
+        if (!navigator.onLine) {
+            setTimeout(checkNewMessages, 30000);
+            return;
+        }
+
+        fetch(GAS_URL + "?action=getChat&t=" + new Date().getTime())
+        .then(res => res.text()) 
+        .then(text => {
+            if (text === lastChatDataString) return;
+            lastChatDataString = text;
+
+            const data = JSON.parse(text);
             if (data && data.length > 0) {
-                const latest = data.find(msg => msg.sender === "管理者");
+                const latestAdminMsg = [...data].reverse().find(msg => msg.sender === "管理者");
                 const badge = document.getElementById('navBadge');
-                if (latest && latest.read === "") badge.style.display = 'block'; else badge.style.display = 'none';
+                
+                if (latestAdminMsg && latestAdminMsg.read === "") {
+                    badge.style.display = 'block';
+                } else {
+                    badge.style.display = 'none';
+                }
             }
-        }).catch(e => console.error(e)).finally(() => { setTimeout(checkNewMessages, 15000); });
+        }).catch(e => console.error(e))
+        .finally(() => {
+            setTimeout(checkNewMessages, 30000);
+        });
     }
 
     const ITEM_HEIGHT = 50; const SPACER_HEIGHT = 95; 
@@ -430,9 +451,6 @@
     function confirmTimePicker() { if (!currentTargetInput) return; const h = getSelectedValue('pickerHour'); const m = getSelectedValue('pickerMinute'); currentTargetInput.value = `${h}時${m}分`; saveDraft(); closeTimePicker(); }
     function getSelectedValue(colId) { const container = document.getElementById(colId); const selected = container.querySelector('.picker-item.selected'); if (selected) return selected.getAttribute('data-val'); const index = Math.round(container.scrollTop / ITEM_HEIGHT); const items = container.querySelectorAll('.picker-item'); if (items[index]) return items[index].getAttribute('data-val'); return "00"; }
     
-    // ==========================================
-    // 履歴モーダル処理の大幅修正
-    // ==========================================
     function openHistory() { 
         document.getElementById('historyOverlay').style.display = 'flex'; 
         setTimeout(() => document.getElementById('historyOverlay').classList.add('show'), 10); 
@@ -466,7 +484,6 @@
         
         data.forEach((item, i) => { 
             const op = document.createElement('option'); 
-            // 【修正】 rawDate ではなく date を参照
             const d = new Date(item.date); 
             op.value = i; 
             if(!isNaN(d)) {
@@ -485,11 +502,9 @@
         const item = cachedJournalHistory[idx]; 
         if(!item) return; 
         
-        // GAS側で分割されていた場合に備えて結合
         let fullText = item.body || "";
         if (item.menu) fullText = item.menu + "\n" + fullText;
 
-        // 【修正】 全文のテキストから、各項目を自動解析して割り当てる
         let p = { writer: "不明", time: "不明", menu: "不明", hitInfo: "記載なし", reflection: "", absentInfo: item.absence || "なし" };
         let isReflection = false;
         let reflectionLines = [];
@@ -505,7 +520,6 @@
         });
         
         p.reflection = reflectionLines.join('\n').trim();
-        // 振り返りセクションが見つからなかった場合のフォールバック（以前のフォーマット対策）
         if(!p.reflection && !isReflection) p.reflection = fullText;
 
         document.getElementById('historyDetailArea').innerHTML = `
@@ -527,7 +541,6 @@
         `; 
     }
 
-    // ▼ グラフ描画関連のスクリプト
     let allHitData = [];
     let myChart = null;
 
