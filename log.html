@@ -397,6 +397,7 @@
         if(confirm("削除しますか？")) { menuItems.splice(index, 1); localStorage.setItem('clubMenus', JSON.stringify(menuItems)); renderMenus(); saveDraft(); } event.preventDefault(); 
     }
     
+    // ★ここが直って欠席遅刻者が自動記入されます
     function fetchAbsenceData() {
         const display = document.getElementById('absenceData'); display.textContent = "読み込み中..."; display.style.color = "#856404";
         fetch(`${GAS_URL}?action=getTodayAbsence`).then(res => res.text()).then(text => { 
