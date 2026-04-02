@@ -106,7 +106,7 @@
     </div>
 
     <div class="panel">
-        <h3><i class="fas fa-user-check"></i> 今日の欠席・遅刻</h3>
+        <h3><i class="fas fa-user-check"></i> 今日の欠席・遅刻・早退</h3>
         <div id="absenceData" class="absence-display">（下のボタンを押して読み込み）</div>
         <button class="btn-fetch" onclick="fetchAbsenceData()"><i class="fas fa-sync-alt"></i> ここを押して最新の出欠情報を自動書き込み</button>
     </div>
@@ -343,7 +343,7 @@
              message += `■的中: ${shots}射 ${hits}中 (${rate || "0.0%"})\n`;
         }
         
-        message += `■欠席・遅刻: ${absenceInfo}\n`;
+        message += `■欠席・遅刻・早退: ${absenceInfo}\n`;
         message += `■振り返り:\n${reflection}`;
 
         const btn = document.querySelector('.send-btn');
@@ -515,7 +515,7 @@
             else if (line.startsWith('■時間:')) p.time = line.replace('■時間:', '').trim();
             else if (line.startsWith('■メニュー:')) p.menu = line.replace('■メニュー:', '').trim();
             else if (line.startsWith('■的中:')) p.hitInfo = line.replace('■的中:', '').trim();
-            else if (line.startsWith('■欠席・遅刻:')) p.absentInfo = line.replace('■欠席・遅刻:', '').trim();
+            else if (line.startsWith('■欠席・遅刻:') || line.startsWith('■欠席・遅刻・早退:')) p.absentInfo = line.replace('■欠席・遅刻:', '').replace('■欠席・遅刻・早退:', '').trim();
             else if (line.startsWith('■振り返り:')) isReflection = true;
             else if (isReflection) reflectionLines.push(line);
         });
