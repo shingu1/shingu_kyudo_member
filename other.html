@@ -38,9 +38,9 @@
         .bubble { max-width: 70%; width: fit-content; padding: 8px 14px; font-size: 0.95rem; line-height: 1.45; white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere; box-shadow: 0 1px 2px rgba(0,0,0,0.1); position: relative; z-index: 1; color: #000; border: 1px solid rgba(0,0,0,0.03); }
         .icon-area { width: 38px; height: 38px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 8px; flex-shrink: 0; color: #555; border: 1px solid #ddd; margin-top: 15px; }
         .meta-info { display: flex; flex-direction: column; justify-content: flex-end; font-size: 0.65rem; color: rgba(255,255,255,0.85); min-width: fit-content; margin-bottom: 2px; text-shadow: none; white-space: nowrap; }
-        .me .meta-info { align-items: flex-end; margin-right: 6px; text-align: right; }
-        .teacher .meta-info { align-items: flex-start; margin-left: 6px; }
-        .read-status { color: rgba(255,255,255,0.9); font-size: 0.65rem; margin-bottom: 2px; }
+        .me .meta-info { align-items: flex-end; margin-right: 4px; text-align: right; }
+        .teacher .meta-info { align-items: flex-start; margin-left: 4px; }
+        .read-status { color: rgba(255,255,255,0.8); font-size: 0.65rem; margin-bottom: 0px; }
         .input-area { background: var(--line-input-bg); padding: 8px 10px; flex-shrink: 0; border-top: 1px solid #ddd; display: flex; align-items: flex-end; gap: 10px; padding-bottom: max(8px, env(safe-area-inset-bottom)); z-index: 10; }
         .btn-plus { width: 34px; height: 34px; color: #999; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; margin-bottom: 3px; }
         textarea { flex-grow: 1; height: 36px; max-height: 100px; border: none; border-radius: 18px; padding: 8px 15px; font-size: 1rem; resize: none; font-family: inherit; background: #fff; }
@@ -111,8 +111,8 @@
         }
         .me .bubble-with-reaction { align-items: flex-end; }
         .teacher .bubble-with-reaction { align-items: flex-start; }
-        .message-row.me .reaction-bar { justify-content: flex-end; margin-right: 4px; }
-        .message-row.teacher .reaction-bar { justify-content: flex-start; margin-left: 9px; }
+        .message-row.me .reaction-bar { justify-content: flex-end; margin-right: 8px; flex-basis: 100%; }
+        .message-row.teacher .reaction-bar { justify-content: flex-start; margin-left: 8px; flex-basis: 100%; }
 
         /* リアクション通知メッセージ（非表示で送られてくるシステムメッセージ） */
         .message-row.reaction-notification { display: none !important; }
@@ -455,7 +455,9 @@
 
         // リアクションバーHTML生成
         let reactionBarHtml = "";
+        let hasReaction = false;
         if (reactions && Object.keys(reactions).length > 0) {
+            hasReaction = true;
             reactionBarHtml = '<div class="reaction-bar">';
             for (const [emoji, senders] of Object.entries(reactions)) {
                 const count = senders.length;
@@ -465,27 +467,24 @@
         }
 
         if (isMe) {
+            row.style.flexWrap = "wrap";
             row.innerHTML = `
             <div class="meta-info">
                 ${readHtml}
                 <span class="time">${timeStr}</span>
             </div>
-            <div class="bubble-with-reaction" style="display:flex;flex-direction:column;align-items:flex-end;">
-                <div class="${bubbleClass}" onclick="${isDeleted ? '' : `openUnsendModal('${msg.time}')`}">${displayMsg}</div>
-                ${reactionBarHtml}
-            </div>
+            <div class="${bubbleClass}" onclick="${isDeleted ? '' : `openUnsendModal('${msg.time}')`}">${displayMsg}</div>
+            ${reactionBarHtml}
             `;
         } else {
             row.innerHTML = `
             <div class="icon-area"><i class="fas fa-user-tie"></i></div>
             <div class="teacher-container">
                 <div class="sender-name">${escapeHtml(msg.sender)}</div>
-                <div class="message-content-wrapper">
-                    <div class="bubble-with-reaction" style="display:flex;flex-direction:column;align-items:flex-start;">
-                        <div class="${bubbleClass}" data-time="${msg.time}" data-sender="${escapeHtml(msg.sender)}">${displayMsg}</div>
-                        ${reactionBarHtml}
-                    </div>
+                <div class="message-content-wrapper" style="flex-wrap: wrap;">
+                    <div class="${bubbleClass}" data-time="${msg.time}" data-sender="${escapeHtml(msg.sender)}">${displayMsg}</div>
                     <div class="meta-info"><span class="time">${timeStr}</span></div>
+                    ${reactionBarHtml}
                 </div>
             </div>
             `;
