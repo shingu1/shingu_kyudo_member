@@ -11,7 +11,6 @@
             --my-msg-bg: #8de055; --other-msg-bg: #ffffff; --text: #333;
             --line-input-bg: #f3f3f3; --line-send-color: #007aff;
         }
-        /* ★修正: 100dvhを使用し、body自体のスクロールを止めることで上下のバーが隠れるのを防ぎます */
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; display: flex; flex-direction: column; height: 100dvh; overflow: hidden; }
         header { background-color: var(--primary); flex-shrink: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 10; }
         nav ul { display: flex; list-style: none; margin: 0; padding: 0; height: 60px; }
@@ -20,7 +19,6 @@
         nav ul li a.active { color: white; background-color: rgba(255,255,255,0.15); border-bottom: 4px solid var(--accent); }
         .badge { display: none; position: absolute; top: 12px; right: 30%; width: 10px; height: 10px; background-color: #e74c3c; border: 2px solid var(--primary); border-radius: 50%; z-index: 20; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(231, 76, 60, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); } }
-        /* ★修正: メインエリアのみをスクロール可能に設定 */
         main { flex-grow: 1; padding: 20px 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
         .date-divider { text-align: center; margin: 15px 0; position: relative; }
         .date-badge { background-color: rgba(0,0,0,0.15); color: #fff; font-size: 0.7rem; padding: 4px 12px; border-radius: 50px; display: inline-block; text-shadow: 0 1px 1px rgba(0,0,0,0.2); }
@@ -29,21 +27,20 @@
         .unread-badge { background: #e74c3c; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
         .message-row { display: flex; width: 100%; margin-bottom: 5px; }
         .message-row.me { justify-content: flex-end; align-items: flex-end; }
-        .message-row.me .bubble { background-color: var(--my-msg-bg); border-radius: 18px 0 18px 18px; margin-left: 5px; }
-        .message-row.me .bubble::after { content: ""; position: absolute; top: 0; right: -8px; border-top: 10px solid var(--my-msg-bg); border-left: 10px solid transparent; border-right: 10px solid transparent; transform: rotate(-35deg); }
+        .message-row.me .bubble { background-color: var(--my-msg-bg); border-radius: 18px; margin-right: 8px; }
+        .message-row.me .bubble::after { content: ""; position: absolute; top: 12px; right: -7px; width: 14px; height: 16px; background-color: var(--my-msg-bg); clip-path: polygon(0 0, 100% 30%, 0 80%); z-index: -1; }
         .message-row.teacher { justify-content: flex-start; align-items: flex-start; }
         .teacher-container { display: flex; flex-direction: column; max-width: 80%; align-items: flex-start; }
-        .sender-name { font-size: 0.75rem; color: #f0f0f0; margin-bottom: 4px; margin-left: 5px; text-shadow: 0 1px 1px rgba(0,0,0,0.2); }
+        .sender-name { font-size: 0.75rem; color: rgba(255,255,255,0.9); margin-bottom: 3px; margin-left: 5px; text-shadow: none; font-weight: 500; }
         .message-content-wrapper { display: flex; align-items: flex-end; }
-        .message-row.teacher .bubble { background-color: var(--other-msg-bg); border-radius: 0 18px 18px 18px; margin-right: 5px; }
-        .message-row.teacher .bubble::before { content: ""; position: absolute; top: 0; left: -8px; border-top: 10px solid var(--other-msg-bg); border-left: 10px solid transparent; border-right: 10px solid transparent; transform: rotate(35deg); }
-        .bubble { max-width: 70%; width: fit-content; padding: 9px 13px; font-size: 0.95rem; line-height: 1.5; white-space: pre-wrap; word-break: break-all; box-shadow: 0 1px 1px rgba(0,0,0,0.1); position: relative; z-index: 1; color: #000; }
-        .icon-area { width: 38px; height: 38px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 8px; flex-shrink: 0; color: #555; border: 1px solid #ddd; }
-        .meta-info { display: flex; flex-direction: column; justify-content: flex-end; font-size: 0.65rem; color: #fff; min-width: fit-content; margin-bottom: 2px; text-shadow: 0 1px 1px rgba(0,0,0,0.2); white-space: nowrap; }
+        .message-row.teacher .bubble { background-color: var(--other-msg-bg); border-radius: 18px; margin-left: 8px; }
+        .message-row.teacher .bubble::before { content: ""; position: absolute; top: 12px; left: -7px; width: 14px; height: 16px; background-color: var(--other-msg-bg); clip-path: polygon(100% 0, 0 30%, 100% 80%); z-index: -1; }
+        .bubble { max-width: 70%; width: fit-content; padding: 8px 14px; font-size: 0.95rem; line-height: 1.45; white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere; box-shadow: 0 1px 2px rgba(0,0,0,0.1); position: relative; z-index: 1; color: #000; border: 1px solid rgba(0,0,0,0.03); }
+        .icon-area { width: 38px; height: 38px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 8px; flex-shrink: 0; color: #555; border: 1px solid #ddd; margin-top: 15px; }
+        .meta-info { display: flex; flex-direction: column; justify-content: flex-end; font-size: 0.65rem; color: rgba(255,255,255,0.85); min-width: fit-content; margin-bottom: 2px; text-shadow: none; white-space: nowrap; }
         .me .meta-info { align-items: flex-end; margin-right: 6px; text-align: right; }
         .teacher .meta-info { align-items: flex-start; margin-left: 6px; }
-        .read-status { color: #fff; font-weight: bold; font-size: 0.6rem; margin-bottom: 2px; }
-        /* ★修正: スマホのキーボードが出た際にも対応できる余白設定 */
+        .read-status { color: rgba(255,255,255,0.9); font-size: 0.65rem; margin-bottom: 2px; }
         .input-area { background: var(--line-input-bg); padding: 8px 10px; flex-shrink: 0; border-top: 1px solid #ddd; display: flex; align-items: flex-end; gap: 10px; padding-bottom: max(8px, env(safe-area-inset-bottom)); z-index: 10; }
         .btn-plus { width: 34px; height: 34px; color: #999; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; margin-bottom: 3px; }
         textarea { flex-grow: 1; height: 36px; max-height: 100px; border: none; border-radius: 18px; padding: 8px 15px; font-size: 1rem; resize: none; font-family: inherit; background: #fff; }
@@ -53,6 +50,8 @@
         .btn-send:disabled { color: #ccc; }
         .refresh-float { position: fixed; top: 70px; right: 15px; z-index: 100; background: rgba(255,255,255,0.9); border: 1px solid #ccc; border-radius: 20px; padding: 5px 12px; font-size: 0.8rem; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1); color: var(--primary); }
         .settings-float { position: fixed; top: 70px; right: 90px; z-index: 100; background: rgba(255,255,255,0.9); border: 1px solid #ccc; border-radius: 20px; padding: 5px 12px; font-size: 0.8rem; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1); color: #555; }
+
+        /* ===== モーダル共通 ===== */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 2000; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
         .modal-content { background: white; width: 90%; max-width: 320px; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
@@ -60,9 +59,118 @@
         .modal-btn { display: block; width: 100%; padding: 12px; margin-bottom: 10px; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; }
         .btn-danger { background-color: #ffebee; color: #e74c3c; font-weight: bold; }
         .btn-close { background-color: #f0f2f5; color: #333; }
+
+        /* ===== 送信取り消し確認モーダル ===== */
+        #unsendModal .modal-content { max-width: 280px; }
+        #unsendModal .modal-title { font-size: 1rem; color: #555; }
+        #unsendModal .btn-unsend { background: #e74c3c; color: #fff; font-weight: bold; border-radius: 8px; padding: 12px; width: 100%; border: none; font-size: 1rem; cursor: pointer; margin-bottom: 10px; }
+
+        /* ===== 削除済みメッセージ ===== */
         .bubble.unsent { background-color: #f0f0f0; color: #888; font-size: 0.8rem; font-style: italic; border: 1px dashed #ccc; cursor: default; }
         .message-row.me .bubble:not(.unsent) { cursor: pointer; transition: transform 0.1s; }
         .message-row.me .bubble:not(.unsent):active { transform: scale(0.95); }
+
+        /* ===== 絵文字スタンプ ===== */
+        .bubble.stamp {
+            background: transparent !important;
+            box-shadow: none !important;
+            padding: 4px 0 !important;
+            font-size: 3.5rem !important;
+            line-height: 1 !important;
+            border-radius: 0 !important;
+        }
+        .bubble.stamp::before, .bubble.stamp::after { display: none !important; }
+
+        /* ===== リアクション表示 ===== */
+        .reaction-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: -8px;
+            z-index: 2;
+            position: relative;
+        }
+        .reaction-chip {
+            background: #fff;
+            border-radius: 20px;
+            padding: 2px 6px;
+            font-size: 0.85rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            border: 1px solid rgba(0,0,0,0.1);
+            cursor: default;
+            user-select: none;
+            line-height: 1.2;
+        }
+        .reaction-chip .r-count {
+            font-size: 0.75rem;
+            color: #666;
+            font-weight: bold;
+        }
+        .me .bubble-with-reaction { align-items: flex-end; }
+        .teacher .bubble-with-reaction { align-items: flex-start; }
+        .message-row.me .reaction-bar { justify-content: flex-end; margin-right: 4px; }
+        .message-row.teacher .reaction-bar { justify-content: flex-start; margin-left: 9px; }
+
+        /* リアクション通知メッセージ（非表示で送られてくるシステムメッセージ） */
+        .message-row.reaction-notification { display: none !important; }
+
+        /* ===== リアクションピッカー ===== */
+        #reactionPicker {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 12px 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            animation: pickerPop 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-origin: bottom center;
+        }
+        #reactionPicker.active { display: flex; }
+        @keyframes pickerPop {
+            from { opacity: 0; transform: scale(0.6) translateY(10px); }
+            to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .reaction-emoji-btn {
+            font-size: 1.6rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            transition: transform 0.15s, background 0.15s;
+            line-height: 1;
+        }
+        .reaction-emojis-top { display: flex; gap: 8px; justify-content: center; width: 100%; }
+        .reaction-emoji-btn:hover { transform: scale(1.3); background: #f0f0f0; }
+        .reaction-emoji-btn:active { transform: scale(1.0); }
+
+        .custom-emoji-wrap { display: flex; align-items: center; background: #f4f5f7; border-radius: 12px; padding: 6px 10px; width: 100%; box-sizing: border-box; justify-content: space-between; gap: 8px; }
+        .custom-emoji-label { font-size: 0.75rem; color: #555; font-weight: bold; white-space: nowrap; }
+        #customEmojiInput { width: 36px; height: 36px; border: 1px solid #ddd; border-radius: 18px; text-align: center; font-size: 1.2rem; padding: 0; background: #fff; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05) inset; }
+        #customEmojiInput:focus { outline: none; border-color: var(--line-send-color); box-shadow: 0 0 0 2px rgba(0,122,255,0.2); }
+        .custom-send { font-size: 1rem; color: #fff; background: var(--line-send-color); width: 32px; height: 32px; border-radius: 50%; padding: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .custom-send:active { transform: scale(0.9); }
+
+        /* ピッカー三角形の尻尾 */
+        #reactionPickerArrow {
+            display: none;
+            position: fixed;
+            z-index: 2999;
+            width: 0; height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid white;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
+        }
+        #reactionPickerArrow.active { display: block; }
     </style>
 </head>
 <body>
@@ -85,7 +193,7 @@
 <button class="settings-float" onclick="openSettings()"> <i class="fas fa-cog"></i> 設定 </button>
 <button class="refresh-float" onclick="forceReload()"> <i class="fas fa-sync-alt"></i> 更新 </button>
 
-<main id="chatMain" onclick="hideBadge()">
+<main id="chatMain" onclick="closePicker()">
     <div style="text-align:center; color:#fff; margin-top:50px; text-shadow:0 1px 2px rgba(0,0,0,0.2);" id="loading-msg"> <i class="fas fa-spinner fa-spin"></i> 読み込み中... </div>
 </main>
 
@@ -95,6 +203,7 @@
     <button class="btn-send" onclick="sendMessage()" id="sendBtn"> <i class="fas fa-paper-plane"></i> </button>
 </div>
 
+<!-- 設定モーダル -->
 <div id="settingsModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-title">チャット設定</div>
@@ -102,6 +211,35 @@
         <button class="modal-btn btn-close" onclick="closeSettings()"> 閉じる </button>
     </div>
 </div>
+
+<!-- 送信取り消し確認モーダル -->
+<div id="unsendModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-title">メッセージを取り消しますか？<br><small style="color:#999;font-size:0.8rem;">相手の画面からも消えます</small></div>
+        <button class="btn-unsend" onclick="doUnsend()"><i class="fas fa-trash-alt"></i> 送信を取り消す</button>
+        <button class="modal-btn btn-close" onclick="closeUnsendModal()"> キャンセル </button>
+    </div>
+</div>
+
+<!-- リアクション絵文字ピッカー -->
+<div id="reactionPicker">
+    <div class="reaction-emojis-top">
+        <button class="reaction-emoji-btn" onclick="sendReaction('👍')">👍</button>
+        <button class="reaction-emoji-btn" onclick="sendReaction('❤️')">❤️</button>
+        <button class="reaction-emoji-btn" onclick="sendReaction('😂')">😂</button>
+        <button class="reaction-emoji-btn" onclick="sendReaction('😮')">😮</button>
+        <button class="reaction-emoji-btn" onclick="sendReaction('🎉')">🎉</button>
+        <button class="reaction-emoji-btn" onclick="sendReaction('🙏')">🙏</button>
+    </div>
+    <div class="custom-emoji-wrap">
+        <div style="display:flex; align-items:center; gap: 8px;">
+            <span class="custom-emoji-label">好きな<br>絵文字</span>
+            <input type="text" id="customEmojiInput" placeholder="😺" maxlength="8" autocomplete="off" />
+        </div>
+        <button class="reaction-emoji-btn custom-send" onclick="sendCustomReaction()"><i class="fas fa-arrow-up"></i></button>
+    </div>
+</div>
+<div id="reactionPickerArrow"></div>
 
 <script>
     // ==========================================
@@ -113,11 +251,66 @@
     let isSending = false;
     let isFirstLoad = true;
     let lastMessageCount = 0;
-    
     let lastDataString = "";
+
+    // 送信取り消し用
+    let pendingUnsendTime = null;
+
+    // リアクション用
+    let pendingReactionTargetTime = null;
+    let pendingReactionTargetSender = null;
+    let currentReactionMap = {}; // 現在のリアクション状態を保持
+
+    // ===== 絵文字のみかどうか判定 =====
+    // Unicode絵文字（修飾子・結合文字・ZWJ含む）のみかチェック
+    function isEmojiOnly(str) {
+        if (!str || str.trim() === "") return false;
+        // 空白除去
+        const s = str.trim();
+        // 絵文字セグメントに分割して全部絵文字かチェック
+        // Intl.Segmenter が使えない環境向けに正規表現でも判定
+        const nonEmojiPattern = /[^\p{Emoji}\p{Emoji_Modifier}\p{Emoji_Component}\uFE0F\u200D\s]/u;
+        if (nonEmojiPattern.test(s)) return false;
+        // 最低1文字以上の絵文字がある
+        const emojiPattern = /\p{Emoji}/u;
+        return emojiPattern.test(s);
+    }
+
+    // 1文字の絵文字かどうか厳密に判定する
+    function isValidSingleEmoji(str) {
+        if (!str || !isEmojiOnly(str)) return false;
+        try {
+            const segmenter = new Intl.Segmenter('ja', { granularity: 'grapheme' });
+            const segments = Array.from(segmenter.segment(str.trim()));
+            return segments.length === 1;
+        } catch (e) {
+            // Safari等でIntl.Segmenterがない場合のフォールバック（文字数でざっくり）
+            const len = Array.from(str.trim()).length;
+            return len >= 1 && len <= 3; 
+        }
+    }
+
+    // ===== リアクションメッセージかどうか =====
+    // フォーマット: __REACTION__:{emoji}:{targetTime}
+    function parseReaction(text) {
+        if (!text || !text.startsWith("__REACTION__:")) return null;
+        const parts = text.split(":");
+        // parts[0]="__REACTION__", parts[1]={emoji}, parts[2~]={targetTime(ISO形式に":"が含まれる)}
+        if (parts.length < 3) return null;
+        const emoji = parts[1];
+        const targetTime = parts.slice(2).join(":");
+        return { emoji, targetTime };
+    }
 
     window.onload = function() {
         loadChat();
+        // ピッカー外タップで閉じる
+        document.addEventListener('click', function(e) {
+            const picker = document.getElementById('reactionPicker');
+            if (picker.classList.contains('active') && !picker.contains(e.target)) {
+                closePicker();
+            }
+        });
     };
 
     function loadChat() {
@@ -132,7 +325,7 @@
             .then(response => response.json())
             .then(data => {
                 renderMessages(data);
-                
+
                 const hasUnread = data.some(msg => msg.sender !== '部員' && msg.read === "");
                 if (hasUnread) {
                     fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams({ type: 'markRead', sender: '部員' }) });
@@ -145,14 +338,14 @@
     }
 
     function forceReload() {
-        lastDataString = ""; 
+        lastDataString = "";
         loadChat();
     }
 
     function renderMessages(data) {
         const currentDataString = JSON.stringify(data);
         if (currentDataString === lastDataString) {
-            return; 
+            return;
         }
         lastDataString = currentDataString;
 
@@ -163,22 +356,41 @@
 
         if (!isFirstLoad && data.length > lastMessageCount) {
             const lastMsg = data[data.length - 1];
-            if (lastMsg.sender !== '部員') showBadge();
+            // リアクション通知は新着バッジを立てない
+            if (lastMsg.sender !== '部員' && !parseReaction(lastMsg.text)) showBadge();
         }
         lastMessageCount = data.length;
 
-        chatMain.innerHTML = ''; 
-        if(data.length === 0) { chatMain.innerHTML = '<div style="text-align:center; color:#fff; margin-top:20px; text-shadow:0 1px 2px rgba(0,0,0,0.2);">メッセージはまだありません</div>'; return; }
+        chatMain.innerHTML = '';
+        if (data.length === 0) {
+            chatMain.innerHTML = '<div style="text-align:center; color:#fff; margin-top:20px; text-shadow:0 1px 2px rgba(0,0,0,0.2);">メッセージはまだありません</div>';
+            return;
+        }
 
         data.sort((a, b) => new Date(a.time) - new Date(b.time));
+
+        // ===== リアクションを集計 =====
+        // { targetTime: { emoji: [{sender, time}, ...], ... } }
+        currentReactionMap = {};
+        data.forEach(msg => {
+            const r = parseReaction(msg.text);
+            if (r) {
+                if (!currentReactionMap[r.targetTime]) currentReactionMap[r.targetTime] = {};
+                if (!currentReactionMap[r.targetTime][r.emoji]) currentReactionMap[r.targetTime][r.emoji] = [];
+                currentReactionMap[r.targetTime][r.emoji].push({ sender: msg.sender, time: msg.time });
+            }
+        });
 
         const lastReadTime = localStorage.getItem('lastReadTime') || 0;
         let unreadInserted = false;
         let lastDateStr = "";
 
         data.forEach(msg => {
+            // リアクションメッセージはDOMに直接は表示しない（reactionMapで処理）
+            if (parseReaction(msg.text)) return;
+
             const msgTime = new Date(msg.time).getTime();
-            
+
             if (!unreadInserted && msgTime > lastReadTime && msg.sender !== '部員') {
                 const divider = document.createElement('div');
                 divider.className = 'unread-divider';
@@ -188,7 +400,7 @@
             }
 
             const dateObj = new Date(msg.time);
-            const dateStr = dateObj.toLocaleDateString('ja-JP'); 
+            const dateStr = dateObj.toLocaleDateString('ja-JP');
             if (dateStr !== lastDateStr) {
                 const displayDate = dateObj.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' });
                 const dateDiv = document.createElement('div');
@@ -197,7 +409,10 @@
                 chatMain.appendChild(dateDiv);
                 lastDateStr = dateStr;
             }
-            appendMessageToDom(msg);
+
+            // リアクション付きで描画
+            const reactions = currentReactionMap[msg.time] || {};
+            appendMessageToDom(msg, reactions);
         });
 
         localStorage.setItem('lastReadTime', new Date().getTime());
@@ -209,64 +424,241 @@
         }, 50);
     }
 
-    function appendMessageToDom(msg) {
+    function appendMessageToDom(msg, reactions) {
         let timeStr = "";
-        if(msg.time) { const d = new Date(msg.time); timeStr = `${d.getHours()}:${d.getMinutes().toString().padStart(2,'0')}`; }
-        
+        if (msg.time) {
+            const d = new Date(msg.time);
+            timeStr = `${d.getHours()}:${d.getMinutes().toString().padStart(2,'0')}`;
+        }
+
         const isMe = (msg.sender === "部員");
         const isDeleted = (msg.text === "__DELETED__");
-        
+
         const row = document.createElement('div');
         row.className = `message-row ${isMe ? 'me' : 'teacher'}`;
-        
+
         const readHtml = (isMe && msg.read === "既読" && !isDeleted) ? `<div class="read-status">既読</div>` : ``;
 
         let displayMsg = escapeHtml(msg.text);
         let bubbleClass = "bubble";
-        let clickAttr = "";
+        let stampClass = "";
 
         if (isDeleted) {
             displayMsg = "メッセージの送信を取り消しました";
             bubbleClass += " unsent";
-        } else if (isMe) {
-            clickAttr = `onclick="confirmUnsend('${msg.time}')"`;
+        } else if (!isDeleted && isEmojiOnly(msg.text)) {
+            // 絵文字のみ → スタンプ表示
+            stampClass = " stamp";
+            bubbleClass += stampClass;
+            displayMsg = escapeHtml(msg.text.trim());
         }
 
-        if(isMe) {
+        // リアクションバーHTML生成
+        let reactionBarHtml = "";
+        if (reactions && Object.keys(reactions).length > 0) {
+            reactionBarHtml = '<div class="reaction-bar">';
+            for (const [emoji, senders] of Object.entries(reactions)) {
+                const count = senders.length;
+                reactionBarHtml += `<span class="reaction-chip">${emoji}<span class="r-count">${count > 1 ? count : ''}</span></span>`;
+            }
+            reactionBarHtml += '</div>';
+        }
+
+        if (isMe) {
             row.innerHTML = `
             <div class="meta-info">
                 ${readHtml}
                 <span class="time">${timeStr}</span>
             </div>
-            <div class="${bubbleClass}" ${clickAttr}>${displayMsg}</div>
+            <div class="bubble-with-reaction" style="display:flex;flex-direction:column;align-items:flex-end;">
+                <div class="${bubbleClass}" onclick="${isDeleted ? '' : `openUnsendModal('${msg.time}')`}">${displayMsg}</div>
+                ${reactionBarHtml}
+            </div>
             `;
         } else {
             row.innerHTML = `
             <div class="icon-area"><i class="fas fa-user-tie"></i></div>
             <div class="teacher-container">
-                <div class="sender-name">${msg.sender}</div>
+                <div class="sender-name">${escapeHtml(msg.sender)}</div>
                 <div class="message-content-wrapper">
-                    <div class="${bubbleClass}">${displayMsg}</div>
+                    <div class="bubble-with-reaction" style="display:flex;flex-direction:column;align-items:flex-start;">
+                        <div class="${bubbleClass}" data-time="${msg.time}" data-sender="${escapeHtml(msg.sender)}">${displayMsg}</div>
+                        ${reactionBarHtml}
+                    </div>
                     <div class="meta-info"><span class="time">${timeStr}</span></div>
                 </div>
             </div>
             `;
         }
+
+        // 相手のバブルにタップでリアクションピッカーを表示
+        if (!isMe && !isDeleted) {
+            const bubble = row.querySelector('.bubble');
+            if (bubble) {
+                bubble.style.cursor = 'pointer';
+                bubble.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    openReactionPicker(e, msg.time, msg.sender);
+                });
+            }
+        }
+
         chatMain.appendChild(row);
     }
 
+    // ===== 送信取り消しモーダル =====
+    function openUnsendModal(timeStr) {
+        pendingUnsendTime = timeStr;
+        document.getElementById('unsendModal').classList.add('active');
+    }
+    function closeUnsendModal() {
+        pendingUnsendTime = null;
+        document.getElementById('unsendModal').classList.remove('active');
+    }
+    function doUnsend() {
+        if (!pendingUnsendTime) return;
+        const formData = new FormData();
+        formData.append('type', 'unsend');
+        formData.append('sender', '部員');
+        formData.append('targetTime', pendingUnsendTime);
+
+        fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: formData })
+        .then(() => { setTimeout(forceReload, 1000); })
+        .catch(err => { alert("取り消しに失敗しました"); console.error(err); });
+
+        closeUnsendModal();
+    }
+
+    // ===== リアクションピッカー =====
+    function openReactionPicker(e, targetTime, targetSender) {
+        pendingReactionTargetTime = targetTime;
+        pendingReactionTargetSender = targetSender;
+
+        const picker = document.getElementById('reactionPicker');
+        const arrow  = document.getElementById('reactionPickerArrow');
+
+        // バブルの位置を基準にピッカーを配置
+        const rect = e.currentTarget.getBoundingClientRect();
+        const pickerW = 310; // 幅
+        const pickerH = 110;  // 概算高さ（2段）
+
+        let left = rect.left + rect.width / 2 - pickerW / 2;
+        if (left < 8) left = 8;
+        if (left + pickerW > window.innerWidth - 8) left = window.innerWidth - pickerW - 8;
+
+        let top = rect.top - pickerH - 16;
+        if (top < 70) top = rect.bottom + 8; // 上が狭ければ下に出す
+
+        picker.style.left = left + "px";
+        picker.style.top  = top  + "px";
+
+        // 三角形
+        const arrowLeft = rect.left + rect.width / 2 - 8;
+        arrow.style.left = arrowLeft + "px";
+        arrow.style.top  = (top + pickerH - 2) + "px";
+
+        picker.classList.add('active');
+        arrow.classList.add('active');
+
+        e.stopPropagation();
+    }
+
+    function closePicker() {
+        document.getElementById('reactionPicker').classList.remove('active');
+        document.getElementById('reactionPickerArrow').classList.remove('active');
+    }
+
+    function sendReaction(emoji) {
+        closePicker();
+        if (!pendingReactionTargetTime) return;
+
+        const targetTime = pendingReactionTargetTime;
+        pendingReactionTargetTime = null;
+        pendingReactionTargetSender = null;
+
+        let existingReactionMsgTime = null;
+        let existingEmoji = null;
+
+        // 自分が既に送信したリアクションがあるか調べる
+        const reactionsOnTarget = currentReactionMap[targetTime];
+        if (reactionsOnTarget) {
+            for (const [emo, senders] of Object.entries(reactionsOnTarget)) {
+                const myReaction = senders.find(s => s.sender === '部員');
+                if (myReaction) {
+                    existingReactionMsgTime = myReaction.time;
+                    existingEmoji = emo;
+                    break;
+                }
+            }
+        }
+
+        // 1. 全く同じ絵文字をタップした場合は登録解除 (unsend のみ)
+        if (existingReactionMsgTime && existingEmoji === emoji) {
+            const formData = new FormData();
+            formData.append('type', 'unsend');
+            formData.append('sender', '部員');
+            formData.append('targetTime', existingReactionMsgTime);
+            fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: formData })
+            .then(() => { setTimeout(forceReload, 1000); });
+            return;
+        }
+
+        // 2. 異なる絵文字をタップした場合は、以前のリアクションを削除してから新しいものを送信
+        if (existingReactionMsgTime && existingEmoji !== emoji) {
+            const formDataUnsend = new FormData();
+            formDataUnsend.append('type', 'unsend');
+            formDataUnsend.append('sender', '部員');
+            formDataUnsend.append('targetTime', existingReactionMsgTime);
+            fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: formDataUnsend })
+            .then(() => {
+                sendReactionRequest(emoji, targetTime);
+            });
+            return;
+        }
+
+        // 3. 今までにリアクションをしていなかった場合はそのまま送信
+        sendReactionRequest(emoji, targetTime);
+    }
+
+    function sendReactionRequest(emoji, targetTime) {
+        const reactionText = `__REACTION__:${emoji}:${targetTime}`;
+        const formData = new FormData();
+        formData.append('type', 'chat');
+        formData.append('sender', '部員');
+        formData.append('text', reactionText);
+
+        fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: formData })
+        .then(() => { setTimeout(forceReload, 1000); })
+        .catch(err => { console.error("リアクション送信失敗", err); });
+    }
+
+    function sendCustomReaction() {
+        const input = document.getElementById('customEmojiInput');
+        const val = input.value;
+        if (!val) return;
+        
+        if (!isValidSingleEmoji(val)) {
+            alert("絵文字を1つだけ入力してください。");
+            return;
+        }
+        
+        sendReaction(val.trim());
+        input.value = "";
+    }
+
+    // ===== メッセージ送信 =====
     function sendMessage() {
-        if(isSending) return;
+        if (isSending) return;
         const input = document.getElementById('msgInput');
         const text = input.value.trim();
-        if(!text) return;
+        if (!text) return;
         hideBadge();
 
         const now = new Date();
         const tempMsg = { sender: "部員", text: text, time: now.toISOString(), read: "" };
-        
-        lastDataString = ""; 
-        appendMessageToDom(tempMsg);
+
+        lastDataString = "";
+        appendMessageToDom(tempMsg, {});
         chatMain.scrollTop = chatMain.scrollHeight;
         input.value = ''; input.focus();
 
@@ -279,23 +671,10 @@
         .finally(() => { isSending = false; });
     }
 
-    function confirmUnsend(timeStr) {
-        if (confirm("このメッセージの送信を取り消しますか？\n（相手の画面からも消えます）")) {
-            const formData = new FormData();
-            formData.append('type', 'unsend');
-            formData.append('sender', '部員');
-            formData.append('targetTime', timeStr);
-
-            fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: formData })
-            .then(() => { setTimeout(forceReload, 1000); })
-            .catch(err => { alert("取り消しに失敗しました"); console.error(err); });
-        }
-    }
-
     function openSettings() { document.getElementById('settingsModal').classList.add('active'); }
     function closeSettings() { document.getElementById('settingsModal').classList.remove('active'); }
     function executeReset() {
-        if(confirm("本当にトーク履歴を削除しますか？\nこの操作は取り消せません。")) {
+        if (confirm("本当にトーク履歴を削除しますか？\nこの操作は取り消せません。")) {
             const formData = new FormData();
             formData.append('type', 'resetChat');
             fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: formData })
@@ -305,7 +684,7 @@
 
     function showBadge() { document.getElementById('navBadge').style.display = 'block'; }
     function hideBadge() { document.getElementById('navBadge').style.display = 'none'; }
-    function escapeHtml(str) { if(!str) return ""; return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;'); }
+    function escapeHtml(str) { if (!str) return ""; return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;'); }
 </script>
 
 </body>

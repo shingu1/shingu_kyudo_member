@@ -104,6 +104,7 @@
         .status-btn { width: 38px; height: 38px; border-radius: 50%; border: 1px solid #e0e0e0; background: white; color: #ccc; cursor: pointer; font-weight: bold; font-size: 0.85rem; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
         .status-btn.active[data-status="present"] { background: var(--success); color: white; border-color: var(--success); }
         .status-btn.active[data-status="late"] { background: var(--warning); color: white; border-color: var(--warning); }
+        .status-btn.active[data-status="early"] { background: #9b59b6; color: white; border-color: #9b59b6; }
         .status-btn.active[data-status="absent"] { background: var(--danger); color: white; border-color: var(--danger); }
         .btn-edit { background: none; border: none; color: #95a5a6; cursor: pointer; padding: 0 5px; }
         .group-edit-dropdown { padding: 8px; border-radius: 6px; border: 2px solid var(--accent); background: #fff; font-weight: bold; color: var(--primary); }
@@ -209,6 +210,11 @@
 
 <main>
     <div class="send-area">
+        <div style="margin-bottom: 12px;">
+            <a href="error.html" style="color: #c0392b; font-size: 0.85rem; text-decoration: underline; font-weight: bold; display: inline-flex; align-items: center; gap: 4px;">
+                <i class="fas fa-question-circle"></i> 何度もエラーが表示される場合はコチラ
+            </a>
+        </div>
         <button class="send-btn" onclick="sendDataToGAS()">
             <i class="fas fa-paper-plane"></i> 出欠情報を送信
         </button>
@@ -426,11 +432,13 @@
 
         const absents = members.filter(m => isTargetMember(m) && m.status === 'absent');
         const lates = members.filter(m => isTargetMember(m) && m.status === 'late');
+        const earlys = members.filter(m => isTargetMember(m) && m.status === 'early');
 
         let textParts = [];
         if (absents.length > 0) textParts.push(`【欠席】${absents.map(m => `[${m.grade}年]${m.name}`).join('、')}`);
         if (lates.length > 0) textParts.push(`【遅刻】${lates.map(m => `[${m.grade}年]${m.name}`).join('、')}`);
-        const finalText = textParts.length > 0 ? textParts.join("\n") : "欠席・遅刻なし";
+        if (earlys.length > 0) textParts.push(`【早退】${earlys.map(m => `[${m.grade}年]${m.name}`).join('、')}`);
+        const finalText = textParts.length > 0 ? textParts.join("\n") : "欠席・遅刻・早退なし";
         
         const formData = new FormData();
         formData.append('type', 'attendance');
@@ -532,6 +540,7 @@
                 actionContent = `
                     <button class="status-btn ${m.status==='present'?'active':''}" onclick="updateStatus(${m.id},'present', this)" data-status="present">出</button>
                     <button class="status-btn ${m.status==='late'?'active':''}" onclick="updateStatus(${m.id},'late', this)" data-status="late">遅</button>
+                    <button class="status-btn ${m.status==='early'?'active':''}" onclick="updateStatus(${m.id},'early', this)" data-status="early">早</button>
                     <button class="status-btn ${m.status==='absent'?'active':''}" onclick="updateStatus(${m.id},'absent', this)" data-status="absent">欠</button>
                     <button class="btn-edit" onclick="openEdit(${m.id})"><i class="fas fa-pen"></i></button>
                 `;
@@ -752,11 +761,13 @@
 
         const absents = members.filter(m => isTargetMember(m) && m.status === 'absent');
         const lates = members.filter(m => isTargetMember(m) && m.status === 'late');
+        const earlys = members.filter(m => isTargetMember(m) && m.status === 'early');
 
         let textParts = [];
         if (absents.length > 0) textParts.push(`【欠席】${absents.map(m => `[${m.grade}年]${m.name}`).join('、')}`);
         if (lates.length > 0) textParts.push(`【遅刻】${lates.map(m => `[${m.grade}年]${m.name}`).join('、')}`);
-        const finalText = textParts.length > 0 ? textParts.join("\n") : "欠席・遅刻なし";
+        if (earlys.length > 0) textParts.push(`【早退】${earlys.map(m => `[${m.grade}年]${m.name}`).join('、')}`);
+        const finalText = textParts.length > 0 ? textParts.join("\n") : "欠席・遅刻・早退なし";
         
         const btn = document.querySelector('.send-btn');
         const msg = document.getElementById('status-msg');
